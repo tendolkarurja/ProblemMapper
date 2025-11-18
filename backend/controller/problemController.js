@@ -1,16 +1,35 @@
-const problem = require('../models/Problems.js');
+// backend/controller/problemController.js
 
-const createProblem = async(req, res) =>{
-    const newProblem = await problem.create(req.body);
+const Problem = require('../models/Problems.js'); // Assuming this is the correct Model constant
 
-    res.status(201).json({
-        status:'success',
-        data : {problem: newProblem}
-    })
+// ------------------------------------
+// 1. CREATE Problem
+// ------------------------------------
+exports.createProblem = async(req, res) =>{ // <-- FIX: Changed from 'const' to 'exports.'
+    try {
+        const newProblem = await Problem.create({ // Use uppercase 'Problem'
+            ...req.body, 
+            reportedBy: req.user._id 
+        });
+
+        res.status(201).json({
+            status:'success',
+            data : { problem: newProblem } // ✅ NOTE: Changed back to lowercase 'problem' here, as it's cleaner for JSON data keys
+        });
+
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err.message
+        });
+    }
 };
 
-const getAllProblems = async(req, res) =>{
-    const problems = await problem.find().sort({ createdAt: -1 });
+// ------------------------------------
+// 2. GET All Problems
+// ------------------------------------
+exports.getAllProblems = async(req, res) =>{ // <-- FIX: Changed from 'const' to 'exports.'
+    const problems = await Problem.find().sort({ createdAt: -1 }); // Use uppercase 'Problem'
     res.status(200).json({
         status: 'success',
         results: problems.length,
@@ -18,7 +37,10 @@ const getAllProblems = async(req, res) =>{
     });
 };
 
-const getProblemsNear = async(req, res) => {
+// ------------------------------------
+// 3. GET Problems Near Me
+// ------------------------------------
+exports.getProblemsNear = async(req, res) => { // <-- FIX: Changed from 'const' to 'exports.'
     const { lon, lat, distance } = req.query;
 
     if (!lon || !lat || !distance) {
@@ -29,7 +51,7 @@ const getProblemsNear = async(req, res) => {
     }
 
     try {
-        const problems = await problem.find({
+        const problems = await Problem.find({ // Use uppercase 'Problem'
             location: {
                 $nearSphere: {
                     $geometry:{
@@ -54,8 +76,10 @@ const getProblemsNear = async(req, res) => {
     }
 };
 
-module.exports = {
+// ❌ REMOVE THIS BLOCK ENTIRELY
+/* module.exports = {
     createProblem,
     getAllProblems,
     getProblemsNear
 };
+*/

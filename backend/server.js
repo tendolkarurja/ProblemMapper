@@ -9,6 +9,9 @@ app.use(express.json());
 const problemRoutes = require('./routes/problemRoutes.js');
 app.use('/api/problems', problemRoutes);
 
+const userRoutes = require('./routes/userRoutes.js');
+app.use('/api/auth', userRoutes);
+
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
