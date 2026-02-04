@@ -19,15 +19,22 @@ const ProblemSchema = new Schema({
         default: 'Reported' // Set a default status
     },
     upvotes:{
-        type: Number,
-        default: 0
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+    upvoteCount:{
+        type:Number,
+        default:0
     },
     reportedBy:{
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-
+    pinned:{
+        type: Boolean,
+        default: false
+    },
     location:{
         type:{
             type: String,
@@ -45,7 +52,11 @@ const ProblemSchema = new Schema({
                 },
                 message: 'Coordinates must be an array of [longitude, latitude].'
             }
-        }
+        },
+        upvotedBy: [{ // Array to store IDs of users who have voted
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User'
+        }],
     }
 }, { 
     timestamps: true
