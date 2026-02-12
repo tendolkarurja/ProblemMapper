@@ -52,12 +52,12 @@ const ProblemSchema = new Schema({
                 },
                 message: 'Coordinates must be an array of [longitude, latitude].'
             }
-        },
+        }},
         upvotedBy: [{ // Array to store IDs of users who have voted
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'User'
         }],
-    }
+    
 }, { 
     timestamps: true
 });
