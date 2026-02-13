@@ -8,11 +8,11 @@ const ProblemSchema = new Schema({
         trim: true,
         maxlength: [500, 'Description cannot exceed 500 characters']
     },
-    category:{
+    category:[{
         type: String,
-        enum: ['Roads', 'Garbage', 'Electricity', 'Other'],
+        enum: ['Roads', 'Garbage', 'Electricity', 'Drainage', 'Mosquitoes', 'Other'],
         default: 'Other'
-    },
+    }],
     status:{
         type: String,
         enum: ['Reported', 'In Progress', 'Resolved'],

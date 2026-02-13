@@ -1,5 +1,3 @@
-// backend/controller/problemController.js
-
 const Problem = require('../models/Problems.js'); 
 const mongoose = require('mongoose');
 
@@ -25,59 +23,7 @@ exports.createProblem = async(req, res) =>{
         });
 
     } catch (err) {
-        // ... error handling
         res.status(400).json({ status: 'fail', message: err.message });
-    }
-};
-
-// ------------------------------------
-// 2. GET All Problems
-// ------------------------------------
-exports.getAllProblems = async(req, res) =>{ // <-- FIX: Changed from 'const' to 'exports.'
-    const problems = await Problem.find().sort({ createdAt: -1 }); // Use uppercase 'Problem'
-    res.status(200).json({
-        status: 'success',
-        results: problems.length,
-        data: { problems }
-    });
-};
-
-// ------------------------------------
-// 3. GET Problems Near Me
-// ------------------------------------
-exports.getProblemsNear = async(req, res) => { // <-- FIX: Changed from 'const' to 'exports.'
-    const { lon, lat, distance } = req.query;
-
-    if (!lon || !lat || !distance) {
-        return res.status(400).json({
-            status: 'fail',
-            message: 'Missing required query parameters: lon, lat, and distance.'
-        });
-    }
-
-    try {
-        const problems = await Problem.find({ // Use uppercase 'Problem'
-            location: {
-                $nearSphere: {
-                    $geometry:{
-                        type: "Point",
-                        coordinates: [parseFloat(lon), parseFloat(lat)]
-                    },
-                    $maxDistance: parseInt(distance) 
-                }
-            }
-        });
-
-        res.status(200).json({
-            status: 'success',
-            results: problems.length,
-            data: { problems }
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: 'error',
-            message: 'Error executing geospatial query.'
-        });
     }
 };
 
@@ -170,5 +116,53 @@ exports.updateProblemStatus = async (req, res) => {
 
     } catch (err) {
         return res.status(400).json({ status: 'error', message: err.message });
+    }
+};
+
+exports.getProblems = async (req, res) => {
+    try {
+        
+        const { lon, lat, distance, category, problemId } = req.query;
+        let query = {};
+
+        if (lon && lon >= 0 && lat  && lat >= 0 && distance) {
+            
+            const longitude = parseFloat(lon);
+            const latitude = parseFloat(lat);
+            const dist = parseInt(distance);
+
+            query.location = {
+                $nearSphere: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [longitude, latitude]
+                    },
+                    $maxDistance: dist
+                }
+            };
+            
+        }
+
+        if (category) {
+            const categoryFilter = Array.isArray(category) ? category : [category];
+            query.category = { $in: categoryFilter }
+        }
+
+        if (problemId) {
+            query.qid = problemId;
+        }
+
+        // Execute query
+        const problems = await Problem.find(query);
+
+        res.status(200).json({
+            status: 'success',
+            results: problems.length,
+            data: { problems }
+        });
+
+    } catch (err) {
+        console.error("Query Error:", err);
+        res.status(500).json({ status: 'error', message: err.message });
     }
 };
