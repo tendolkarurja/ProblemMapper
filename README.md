@@ -1,8 +1,8 @@
-# 📍 ProblemMapper
+# ProblemMapper
 
 ## A robust RESTful API built with the **MERN stack** (Node.js/Express/MongoDB) that allows citizens to report, upvote, and track local infrastructure issues using geospatial data.
 
-### 🚀 Features
+### Features
 
 * **Authentication & Authorization**: 
     * Secure **JWT-based** login and registration system.
@@ -21,7 +21,7 @@
 
 ---
 
-### 🛠️ Tech Stack
+### Tech Stack
 
 * **Runtime**: Node.js
 * **Framework**: Express.js
@@ -31,7 +31,7 @@
 
 ---
 
-### 🔑 API Endpoints
+### API Endpoints
 
 #### **User Authentication**
 | Method | Endpoint | Description |
@@ -42,8 +42,7 @@
 #### **Problem Management**
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| **GET** | `/api/problems` | Fetch all reported issues (sorted by newest). |
-| **GET** | `/api/problems/near` | Find issues within a specific radius using `lat`, `lon`, and `distance` query params. |
+| **GET** | `/api/problems` | Fetch all reported issues (sorted by newest) based on the filters passed as parameters|
 | **POST** | `/api/problems` | Create a new report. Automatically assigns the logged-in user as the reporter. |
 | **PATCH** | `/api/problems/upvote/:id` | Toggle an upvote on an issue. Users cannot upvote their own reports. |
 | **PATCH** | `/api/problems/status/:id` | Update status to `Reported`, `In Progress`, or `Resolved`. |
