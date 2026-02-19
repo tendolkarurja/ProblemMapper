@@ -47,3 +47,16 @@
 | **PATCH** | `/api/problems/upvote/:id` | Toggle an upvote on an issue. Users cannot upvote their own reports. |
 | **PATCH** | `/api/problems/status/:id` | Update status to `Reported`, `In Progress`, or `Resolved`. |
 
+
+### Set Up Instructions:
+#### For backend: ####
+
+* **Installations**: express, bcryptjs, jsonwebtoken, dotenv, mongoose
+* **.env file**: Add the following in the .env file to be created in the backend folder:
+  * PORT=<port_no>
+  * MONGO_URI=<connection_string>
+  * NODE_ENV=development
+  * JWT_SECRET=<secret>
+  * JWT_EXPIRES_IN=1h
+
+
