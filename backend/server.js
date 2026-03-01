@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 const app = express();
 app.use(express.json());
 
+// allow clients to retrieve stored photos
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 const problemRoutes = require('./routes/problemRoutes.js');
 app.use('/api/problems', problemRoutes);

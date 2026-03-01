@@ -58,6 +58,16 @@ const ProblemSchema = new Schema({
             ref: 'User'
         }],
     
+    // store path to the uploaded photo (live photo)
+    photo: {
+        type: String,
+        required: [true, 'A photo is required for each problem']
+    },
+    // optional metadata extracted from the image for auditing/verification
+    photoMetadata: {
+        type: mongoose.Schema.Types.Mixed,
+        select: false // hide by default in queries unless explicitly requested
+    }
 }, { 
     timestamps: true
 });

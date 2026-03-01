@@ -43,7 +43,7 @@
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | **GET** | `/api/problems` | Fetch all reported issues (sorted by newest) based on the filters passed as parameters|
-| **POST** | `/api/problems` | Create a new report. Automatically assigns the logged-in user as the reporter. |
+| **POST** | `/api/problems` | Create a new report. Automatically assigns the logged-in user as the reporter. **Requires a camera-captured photo upload** with field name `photo` (no gallery images allowed). The server reads EXIF metadata to ensure the picture was taken just before submission and that its GPS coordinates match the supplied `location` (GeoJSON point) within ~100 m. |
 | **PATCH** | `/api/problems/upvote/:id` | Toggle an upvote on an issue. Users cannot upvote their own reports. |
 | **PATCH** | `/api/problems/status/:id` | Update status to `Reported`, `In Progress`, or `Resolved`. |
 

@@ -10,11 +10,23 @@ exports.createProblem = async(req, res) =>{
         ? req.user.userId // Success: Use the verified ID
         : PLACEHOLDER_USER_ID;
 
+    // photo should have been handled by multer + verifyLivePhoto middleware
+    if (!req.file || !req.file.relativePath) {
+        return res.status(400).json({ status: 'fail', message: 'No valid camera photo provided.' });
+    }
+
+    // location must be supplied in body as GeoJSON point
+    if (!req.body.location || !Array.isArray(req.body.location.coordinates)) {
+        return res.status(400).json({ status: 'fail', message: 'Location coordinates are required in the request body.' });
+    }
+
     console.log(reporterId);
     try {
         const newProblem = await Problem.create({ 
             ...req.body,
-            reportedBy : reporterId
+            reportedBy : reporterId,
+            photo: req.file.relativePath,
+            photoMetadata: req.exifMetadata || {}
         });
 
         res.status(201).json({
